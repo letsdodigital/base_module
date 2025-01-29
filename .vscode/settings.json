@@ -4,7 +4,6 @@
   },
   "editor.formatOnSave": true,
   "black-formatter.args": ["--line-length", "79"],
-  "python.analysis.extraPaths": ["./app", "./"],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },
@@ -18,5 +17,9 @@
   "makefile.configureOnOpen": false,
   "terminal.integrated.tabs.enableAnimation": true,
   "terminal.integrated.tabs.description": "${sequence}",
-  "terminal.integrated.tabs.title": "${process}"
+  "terminal.integrated.tabs.title": "${process}",
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.pypoetry/virtualenvs/backend-yStQQXE7-py3.12/bin/python3.12",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/backend/.pypoetry/virtualenvs/backend-yStQQXE7-py3.12/lib/python3.12/site-packages"
+  ]
 }

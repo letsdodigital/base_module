@@ -48,11 +48,26 @@ setup-terminal-description:
     echo "Please run the following command to apply the changes to this terminal:"
     echo "source ~/.zshrc"
 
-alias sp := setup-poetry
-# Set up poetry
-setup-poetry:
+alias sp := setup-python
+# Set up python
+setup-python:
     #!/usr/bin/env bash
     {{initialise}} setup-poetry
-    cd backend/backend
-    echo "Below is the python interpreter path:"
-    poetry run which python
+    if ! command -v jq &> /dev/null
+    then
+        echo "jq could not be found, installing..."
+        brew install jq
+    else
+        echo "jq is already installed"
+    fi
+
+find-subfolders:
+    #!/usr/bin/env bash
+    directory="./backend/.pypoetry/virtualenvs"
+    first_subfolder=$(find "$directory" -type d -mindepth 1 -maxdepth 1 | head -n 1)
+    python="${first_subfolder}/bin/python3.12"
+    site_packages="${first_subfolder}/lib/python3.12/site-packages"
+    
+    echo $python
+    echo $site_packages
+
