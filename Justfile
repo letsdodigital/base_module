@@ -17,7 +17,7 @@ backend:
     #!/usr/bin/env bash
     {{initialise}} "backend"
     docker compose -f backend/docker-compose.yml up --build -d
-    cd backend && docker compose exec backend bash -c "poetry shell && cd app && python manage.py runserver"
+    cd backend && docker compose exec backend bash -c "cd app && poetry run python manage.py runserver 0.0.0.0:8000"
 
 alias bp := backend-poetry
 # Run the web app
