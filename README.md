@@ -1,4 +1,4 @@
-# base_module
+# Base Module
 
 Creating a new digital healthcare template for building modern, safe, fast and reusable apps.
 
