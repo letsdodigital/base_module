@@ -18,8 +18,8 @@
   "terminal.integrated.tabs.enableAnimation": true,
   "terminal.integrated.tabs.description": "${sequence}",
   "terminal.integrated.tabs.title": "${process}",
-  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.pypoetry/virtualenvs/backend-yStQQXE7-py3.12/bin/python3.12",
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/backend/.venv/bin/python3.12",
   "python.analysis.extraPaths": [
-    "${workspaceFolder}/backend/.pypoetry/virtualenvs/backend-yStQQXE7-py3.12/lib/python3.12/site-packages"
+    "${workspaceFolder}/backend/backend/.venv/lib/python3.12/site-packages"
   ]
 }

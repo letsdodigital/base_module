@@ -8,5 +8,8 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/backend
-      - ./.pypoetry:/root/.cache/pypoetry/
+      - pypoetry:/root/.cache/pypoetry/
     command: sh -c "while true; do sleep 1; done"
+
+volumes:
+  pypoetry:
