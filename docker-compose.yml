@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend_database:
+    build:
+      context: ./backend_database
+    container_name: django-backend
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend_database:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_data
+    env_file:
+      - ./backend_database/.env
+
+  postgres_data:
+    image: postgres:14
+    container_name: postgres_data
+    env_file:
+      - ./backend_database/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
