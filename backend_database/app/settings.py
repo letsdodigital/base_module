@@ -80,10 +80,10 @@ WSGI_APPLICATION = "app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_NAME", default="postgres"),
-        "USER": config("POSTGRES_USER", default="postgres"),
-        "PASSWORD": config("POSTGRES_PASSWORD", default="postgres"),
-        "HOST": config("POSTGRES_HOST", default="db"),
+        "NAME": config("POSTGRES_NAME", default="postgres", cast=str),
+        "USER": config("POSTGRES_USER", default="postgres", cast=str),
+        "PASSWORD": config("POSTGRES_PASSWORD", default="postgres", cast=str),
+        "HOST": config("POSTGRES_HOST", default="postgres_data", cast=str),
         "PORT": config("POSTGRES_PORT", default=5432, cast=int),
     }
 }
@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-uk"
 
 TIME_ZONE = "UTC"
 
