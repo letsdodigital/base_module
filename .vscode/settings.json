@@ -1,25 +1,27 @@
 {
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.wordWrap": "on",
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
-  "editor.formatOnSave": true,
   "black-formatter.args": ["--line-length", "79"],
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "always"
+    "source.organizeImports": "always",
+    "source.fixAll.eslint": "explicit"
   },
-
-  "[html]": {
-    "editor.defaultFormatter": "monosans.djlint"
-  },
-  "[django-html]": {
+  "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "jest.runMode": "on-demand",
   "makefile.configureOnOpen": false,
   "terminal.integrated.tabs.enableAnimation": true,
   "terminal.integrated.tabs.description": "${sequence}",
-  "terminal.integrated.tabs.title": "${process}",
-  "python.defaultInterpreterPath": "${workspaceFolder}/backend/backend/.venv/bin/python3.12",
-  "python.analysis.extraPaths": [
-    "${workspaceFolder}/backend/backend/.venv/lib/python3.12/site-packages"
-  ]
+  "terminal.integrated.tabs.title": "${process}"
 }

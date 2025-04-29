@@ -24,11 +24,93 @@ alias bp := backend-poetry
 backend-poetry:
     #!/usr/bin/env bash
     {{initialise}} "backend"
-    docker compose -f backend/docker-compose.yml up --build -d
-    cd backend && docker compose exec backend bash -c 'poetry shell && bash'
+    # docker compose -f backend/docker-compose.yml up --build -d
+    # cd backend && docker compose exec backend bash -c 'poetry shell && bash'
+    docker exec -it django-backend /bin/sh && poetry shell
+
+
+_start-docker-daemon:
+    #!/usr/bin/env bash
+    if ! docker info > /dev/null 2>&1; then
+        echo "Docker is not running."
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS: Start Docker Desktop
+            open -a Docker
+        else
+            # Linux: Start Docker daemon
+            sudo systemctl start docker
+        fi
+
+        # Wait for Docker to be fully running
+        echo "Waiting for Docker to start..."
+        while ! docker info > /dev/null 2>&1; do
+            sleep 1
+        done
+        echo "Docker is now running."
+    else
+        echo "Docker is already running."
+    fi
+
+
+# If needed, starts Docker daemon and also starts the container (detached: default: true, build: default: true)
+_start-container detached="true" build="true":
+    #!/usr/bin/env bash
+    just _start-docker-daemon
+    container_name="backend-database"
+
+    # Determine flags based on arguments
+    detached_flag=""
+    if [ "$detached" = "true" ]; then
+        detached_flag="-d"
+    fi
+
+    build_flag=""
+    if [ "$build" = "true" ]; then
+        build_flag="--build"
+    fi
+
+    if [ "$(docker ps -q -f name=$container_name)" ]; then
+        echo "Container $container_name is already running."
+    else
+        echo "Container $container_name is not running. Starting it now..."
+        docker compose up $detached_flag $build_flag
+    fi
+
+alias i := initialise-project
+# Initialise the project
+initialise-project:
+    #!/usr/bin/env bash
+    {{initialise}} "initialise"
+    just _start-container
+    docker compose exec backend-database /bin/sh -c "poetry install && poetry run python app/create_next_user.py"
+    just makemigrations-migrate
+
+
+alias mm := makemigrations-migrate
+# Run makemigrations and migrate
+makemigrations-migrate:
+    #!/usr/bin/env bash
+    {{initialise}} "makemigrations-migrate"
+    docker compose exec backend-database /bin/sh -c "cd app && poetry run python manage.py makemigrations && poetry run python manage.py migrate"
+
+
+alias r := run
+# Run the whole service
+run:
+    #!/usr/bin/env bash
+    {{initialise}} "run"
+    just _start-container detached="false" build="false"
+
     
-_terminal-description message=" ":
-    echo -ne "\033]0;{{message}}\007"
+find-subfolders:
+    #!/usr/bin/env bash
+    directory="./backend/.pypoetry/virtualenvs"
+    first_subfolder=$(find "$directory" -type d -mindepth 1 -maxdepth 1 | head -n 1)
+    python="${first_subfolder}/bin/python3.12"
+    site_packages="${first_subfolder}/lib/python3.12/site-packages"
+    
+    echo $python
+    echo $site_packages
 
 alias s := setup-terminal-description
 # Set up the description for terminal windows
@@ -61,13 +143,8 @@ setup-python:
         echo "jq is already installed"
     fi
 
-find-subfolders:
-    #!/usr/bin/env bash
-    directory="./backend/.pypoetry/virtualenvs"
-    first_subfolder=$(find "$directory" -type d -mindepth 1 -maxdepth 1 | head -n 1)
-    python="${first_subfolder}/bin/python3.12"
-    site_packages="${first_subfolder}/lib/python3.12/site-packages"
-    
-    echo $python
-    echo $site_packages
+_terminal-description message=" ":
+    echo -ne "\033]0;{{message}}\007"
+
+
 

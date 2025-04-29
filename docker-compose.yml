@@ -1,36 +1,49 @@
 version: '3.8'
 
 services:
-  backend_database:
+  backend-database:
     build:
       context: ./backend_database
-    container_name: django-backend
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+    container_name: backend-database
     volumes:
       - ./backend_database:/app
     ports:
       - "8000:8000"
     depends_on:
-      - postgres_data
+      - postgres-data
+      # - patients-postgres-data
     env_file:
-      - ./backend_database/.env
+      - .env
 
-  postgres_data:
+  postgres-data:
     image: postgres:14
-    container_name: postgres_data
+    container_name: postgres-data
     env_file:
-      - ./backend_database/.env
+      - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+
+  # patients-postgres-data:
+  #   image: postgres:14
+  #   container_name: patients-postgres-data
+  #   environment:
+  #     POSTGRES_DB: ${PATIENTS_POSTGRES_NAME}
+  #     POSTGRES_USER: ${PATIENTS_POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${PATIENTS_POSTGRES_PASSWORD}
+  #   volumes:
+  #     - patients-postgres-data:/var/lib/postgresql/data
   
   frontend:
     build:
       context: ./frontend
-    container_name: react_frontend
+    container_name: react-frontend
     volumes:
       - ./frontend:/app
     ports:
       - "3000:3000"
+    depends_on:
+      - backend-database
 
 volumes:
-  postgres_data:
+  postgres-data:
+  # patients-postgres-data:

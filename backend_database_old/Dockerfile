@@ -27,4 +27,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Run the Django development server
-CMD ["sh", "/app/entrypoint.sh"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

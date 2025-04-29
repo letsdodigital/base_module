@@ -1,8 +1,8 @@
 import PatientDetail from "@/components/PatientDetail";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { FC } from "react";
 import { Button, Dropdown, Grid, Input, Segment } from "semantic-ui-react";
-
 interface PatientBannerProps {
   name: string;
   dob: string;
@@ -91,6 +91,17 @@ const PatientBanner: FC<PatientBannerProps> = ({
                 text={session ? `${session.user?.name}` : "Not signed in"}
                 disabled
               />
+              <Dropdown.Divider />
+              <Dropdown.Item>
+                <Dropdown.Item>
+                  <Link
+                    href="/"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    Home
+                  </Link>
+                </Dropdown.Item>
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item
                 text={session ? "Sign Out" : "Sign In"}

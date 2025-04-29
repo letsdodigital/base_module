@@ -35,6 +35,8 @@ ALLOWED_HOSTS = config(
 # Application definition
 
 INSTALLED_APPS = [
+    "patients",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -52,6 +54,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
 
 ROOT_URLCONF = "app.urls"
 
@@ -83,10 +91,32 @@ DATABASES = {
         "NAME": config("POSTGRES_NAME", default="postgres", cast=str),
         "USER": config("POSTGRES_USER", default="postgres", cast=str),
         "PASSWORD": config("POSTGRES_PASSWORD", default="postgres", cast=str),
-        "HOST": config("POSTGRES_HOST", default="postgres_data", cast=str),
+        "HOST": config("POSTGRES_HOST", default="postgres-data", cast=str),
         "PORT": config("POSTGRES_PORT", default=5432, cast=int),
-    }
+    },
+    "patients": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config(
+            "PATIENTS_POSTGRES_NAME", default="patients_postgres", cast=str
+        ),
+        "USER": config(
+            "PATIENTS_POSTGRES_USER", default="patients_postgres", cast=str
+        ),
+        "PASSWORD": config(
+            "PATIENTS_POSTGRES_PASSWORD", default="patients_postgres", cast=str
+        ),
+        "HOST": config(
+            "PATIENTS_POSTGRES_HOST",
+            default="patients-postgres-data",
+            cast=str,
+        ),
+        "PORT": config("PATIENTS_POSTGRES_PORT", default=5432, cast=int),
+    },
 }
+
+# settings.py
+
+DATABASE_ROUTERS = ["database_router.PatientDatabaseRouter"]
 
 
 # Password validation
