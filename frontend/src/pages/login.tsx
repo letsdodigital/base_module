@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button, Form, Header, Message, Segment } from "semantic-ui-react";
@@ -13,24 +13,17 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8000/api/token/", {
-        username,
-        password,
-      });
 
-      console.log("Login successful:", response.data);
+    const result = await signIn("credentials", {
+      redirect: false,
+      username,
+      password,
+    });
 
-      // Save tokens to localStorage or cookies
-      localStorage.setItem("accessToken", response.data.access);
-      localStorage.setItem("refreshToken", response.data.refresh);
-
-      // Redirect to a protected page
-      console.log("Redirecting to /about");
-      router.push("/about");
-    } catch (err) {
-      console.log(err);
+    if (result?.error) {
       setError("Invalid username or password");
+    } else {
+      router.push("/");
     }
   };
 

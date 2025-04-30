@@ -1,8 +1,8 @@
 import PatientBanner from "@/components/PatientBanner";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { FC } from "react";
 import { Table } from "semantic-ui-react";
-import Link from "next/link";
 
 const Home: FC = () => {
   const { data: session } = useSession();
@@ -33,9 +33,7 @@ const Home: FC = () => {
           <Table.Body>
             <Table.Row>
               <Table.Cell>
-                <Link href="/patient">
-                    John Doe
-                </Link>
+                <Link href="/patient">John Doe</Link>
               </Table.Cell>
               <Table.Cell>45</Table.Cell>
               <Table.Cell>Male</Table.Cell>
