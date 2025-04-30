@@ -19,13 +19,17 @@ const Login = () => {
         password,
       });
 
+      console.log("Login successful:", response.data);
+
       // Save tokens to localStorage or cookies
       localStorage.setItem("accessToken", response.data.access);
       localStorage.setItem("refreshToken", response.data.refresh);
 
       // Redirect to a protected page
-      router.push("/dashboard");
+      console.log("Redirecting to /about");
+      router.push("/about");
     } catch (err) {
+      console.log(err);
       setError("Invalid username or password");
     }
   };

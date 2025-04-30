@@ -31,11 +31,54 @@ ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS", default="*", cast=lambda v: v.split(",")
 )
 
+# CORS_ALLOW_HEADERS = [
+#     "content-type",
+#     "authorization",
+#     "x-requested-with",
+#     "accept",
+#     "origin",
+#     "user-agent",
+#     "x-csrftoken",
+# ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ALLOWED_ORIGINS = ["http://0.0.0.0:3000"]
+
+# CORS_ALLOWED_ORIGINS = config(
+#     "CORS_ALLOWED_ORIGINS",
+#     default="http://localhost:3000,http://0.0.0.0:3000",
+#     cast=lambda v: v.split(","),
+# )
+
+# CORS Configuration
+# CORS_ALLOWED_ORIGINS = config(
+#     "CORS_ALLOWED_ORIGINS",
+#     default="http://localhost:3000",  # Default to Next.js dev server
+#     cast=lambda v: v.split(","),
+# )
+
+# # Allow all origins for testing if CORS_ALLOW_ALL is set to True
+# CORS_ALLOW_ALL_ORIGINS = config("CORS_ALLOW_ALL", default=False, cast=bool)
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+}
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "core",
+    "rest_framework",
+    "rest_framework_simplejwt",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,6 +88,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -53,6 +97,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 ROOT_URLCONF = "app.urls"
 
