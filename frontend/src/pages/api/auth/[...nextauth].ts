@@ -32,8 +32,6 @@ export default NextAuth({
 
           const user = await response.json();
 
-          console.log('Response from backend:', response.status, user); // Debugging
-
           if (response.ok && user) {
             // Return user object if authentication is successful
             return {

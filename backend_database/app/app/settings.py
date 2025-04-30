@@ -78,6 +78,7 @@ REST_FRAMEWORK = {
 INSTALLED_APPS = [
     "corsheaders",
     "core",
+    "patients",
     "rest_framework",
     "rest_framework_simplejwt",
     "django.contrib.admin",

@@ -4,7 +4,19 @@ import Link from "next/link";
 import { FC } from "react";
 import { Table } from "semantic-ui-react";
 
-const Home: FC = () => {
+interface Patient {
+  id: number;
+  first_name: string;
+  last_name: string;
+  age: number; // You can calculate this if needed
+  sex: string;
+}
+
+interface HomeProps {
+  patients: Patient[];
+}
+
+const Home: FC<HomeProps> = ({ patients }) => {
   const { data: session } = useSession();
 
   return (
@@ -22,67 +34,21 @@ const Home: FC = () => {
               <Table.HeaderCell>Patient Name</Table.HeaderCell>
               <Table.HeaderCell>Age</Table.HeaderCell>
               <Table.HeaderCell>Sex</Table.HeaderCell>
-              <Table.HeaderCell>Blood Pressure</Table.HeaderCell>
-              <Table.HeaderCell>Heart Rate</Table.HeaderCell>
-              <Table.HeaderCell>Temperature</Table.HeaderCell>
-              <Table.HeaderCell>Respiratory Rate</Table.HeaderCell>
-              <Table.HeaderCell>Oxygen Saturation</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>
-                <Link href="/patient">John Doe</Link>
-              </Table.Cell>
-              <Table.Cell>45</Table.Cell>
-              <Table.Cell>Male</Table.Cell>
-              <Table.Cell>120/80</Table.Cell>
-              <Table.Cell>72 bpm</Table.Cell>
-              <Table.Cell>98.6°F</Table.Cell>
-              <Table.Cell>16 breaths/min</Table.Cell>
-              <Table.Cell>98%</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Jane Smith</Table.Cell>
-              <Table.Cell>38</Table.Cell>
-              <Table.Cell>Female</Table.Cell>
-              <Table.Cell>110/70</Table.Cell>
-              <Table.Cell>75 bpm</Table.Cell>
-              <Table.Cell>98.4°F</Table.Cell>
-              <Table.Cell>18 breaths/min</Table.Cell>
-              <Table.Cell>97%</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Michael Brown</Table.Cell>
-              <Table.Cell>50</Table.Cell>
-              <Table.Cell>Male</Table.Cell>
-              <Table.Cell>130/85</Table.Cell>
-              <Table.Cell>80 bpm</Table.Cell>
-              <Table.Cell>99.1°F</Table.Cell>
-              <Table.Cell>15 breaths/min</Table.Cell>
-              <Table.Cell>96%</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Emily Davis</Table.Cell>
-              <Table.Cell>29</Table.Cell>
-              <Table.Cell>Female</Table.Cell>
-              <Table.Cell>115/75</Table.Cell>
-              <Table.Cell>68 bpm</Table.Cell>
-              <Table.Cell>98.2°F</Table.Cell>
-              <Table.Cell>17 breaths/min</Table.Cell>
-              <Table.Cell>99%</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Chris Wilson</Table.Cell>
-              <Table.Cell>60</Table.Cell>
-              <Table.Cell>Male</Table.Cell>
-              <Table.Cell>125/80</Table.Cell>
-              <Table.Cell>70 bpm</Table.Cell>
-              <Table.Cell>98.7°F</Table.Cell>
-              <Table.Cell>16 breaths/min</Table.Cell>
-              <Table.Cell>95%</Table.Cell>
-            </Table.Row>
+            {patients.map((patient) => (
+              <Table.Row key={patient.id}>
+                <Table.Cell>
+                  <Link href={`/patient/${patient.id}`}>
+                    {patient.first_name} {patient.last_name}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>{patient.age || "N/A"}</Table.Cell>
+                <Table.Cell>{patient.gender || "N/A"}</Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
       </div>
@@ -105,6 +71,37 @@ const Home: FC = () => {
       )}
     </>
   );
+};
+
+export const getServerSideProps = async () => {
+  try {
+    const authHeader = `Basic ${Buffer.from(
+      `${process.env.NEXT_USERNAME}:${process.env.NEXT_PASSWORD}`
+    ).toString("base64")}`;
+
+    const response = await fetch("http://backend-database:8000/api/patients/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader, // Add the Authorization header
+      },
+    });
+
+    const patients = await response.json();
+
+    return {
+      props: {
+        patients,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    return {
+      props: {
+        patients: [],
+      },
+    };
+  }
 };
 
 export default Home;
