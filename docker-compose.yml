@@ -8,10 +8,10 @@ services:
     volumes:
       - ./backend_database:/app
     ports:
-      - "8000:8000"
+      - "8000:8000" # TODO: remove for production
     depends_on:
       - postgres-data
-      # - patients-postgres-data
+      - patients-postgres-data
     env_file:
       - .env
 
@@ -23,15 +23,15 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  # patients-postgres-data:
-  #   image: postgres:14
-  #   container_name: patients-postgres-data
-  #   environment:
-  #     POSTGRES_DB: ${PATIENTS_POSTGRES_NAME}
-  #     POSTGRES_USER: ${PATIENTS_POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${PATIENTS_POSTGRES_PASSWORD}
-  #   volumes:
-  #     - patients-postgres-data:/var/lib/postgresql/data
+  patients-postgres-data:
+    image: postgres:14
+    container_name: patients-postgres-data
+    environment:
+      POSTGRES_DB: ${PATIENTS_POSTGRES_NAME}
+      POSTGRES_USER: ${PATIENTS_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${PATIENTS_POSTGRES_PASSWORD}
+    volumes:
+      - patients-postgres-data:/var/lib/postgresql/data
   
   frontend:
     build:
@@ -48,4 +48,4 @@ services:
 
 volumes:
   postgres-data:
-  # patients-postgres-data:
+  patients-postgres-data:

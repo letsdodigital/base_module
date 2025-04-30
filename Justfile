@@ -19,6 +19,13 @@ backend-poetry:
     just _start-container detached="true" build="false"
     docker compose exec -it backend-database bash -c "poetry shell && bash"
 
+alias cfp := create-fake-patients
+# Create fake patients
+create-fake-patients:
+    #!/usr/bin/env bash
+    {{initialise}} "create-fake-patients"
+    just _start-container detached="true" build="false"
+    docker compose exec backend-database /bin/sh -c "cd app && poetry run python manage.py create_fake_patients"
 
 _start-docker-daemon:
     #!/usr/bin/env bash
@@ -82,7 +89,11 @@ alias mm := makemigrations-migrate
 makemigrations-migrate:
     #!/usr/bin/env bash
     {{initialise}} "makemigrations-migrate"
-    docker compose exec backend-database /bin/sh -c "cd app && poetry run python manage.py makemigrations && poetry run python manage.py migrate"
+    docker compose exec backend-database /bin/sh -c "\
+    cd app && \
+    poetry run python manage.py makemigrations && \
+    poetry run python manage.py migrate && \
+    poetry run python manage.py migrate --database=patients"
 
 
 alias r := run

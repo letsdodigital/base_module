@@ -8,7 +8,7 @@ interface Patient {
   id: number;
   first_name: string;
   last_name: string;
-  age: number; // You can calculate this if needed
+  date_of_birth: string;
   sex: string;
 }
 
@@ -21,7 +21,7 @@ const Home: FC<HomeProps> = ({ patients }) => {
 
   return (
     <>
-      <PatientBanner name="" dob="" age="" hospitalNumber="" sex="" />
+      <PatientBanner />
       <div
         style={{
           marginLeft: "20px",
@@ -45,8 +45,14 @@ const Home: FC<HomeProps> = ({ patients }) => {
                     {patient.first_name} {patient.last_name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell>{patient.age || "N/A"}</Table.Cell>
-                <Table.Cell>{patient.gender || "N/A"}</Table.Cell>
+                <Table.Cell>{patient.date_of_birth || "N/A"}</Table.Cell>
+                <Table.Cell>
+                  {patient.sex === "M"
+                    ? "Male"
+                    : patient.sex === "F"
+                    ? "Female"
+                    : "N/A"}
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

@@ -124,6 +124,8 @@ WSGI_APPLICATION = "app.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DATABASE_ROUTERS = ["app.database_router.PatientsDatabaseRouter"]
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -132,7 +134,19 @@ DATABASES = {
         "PASSWORD": config("POSTGRES_PASSWORD", default="postgres", cast=str),
         "HOST": config("POSTGRES_HOST", default="postgres-data", cast=str),
         "PORT": config("POSTGRES_PORT", default=5432, cast=int),
-    }
+    },
+    "patients": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("PATIENTS_POSTGRES_NAME", default="postgres", cast=str),
+        "USER": config("PATIENTS_POSTGRES_USER", default="postgres", cast=str),
+        "PASSWORD": config(
+            "PATIENTS_POSTGRES_PASSWORD", default="postgres", cast=str
+        ),
+        "HOST": config(
+            "PATIENTS_POSTGRES_HOST", default="postgres-data", cast=str
+        ),
+        "PORT": config("PATIENTS_POSTGRES_PORT", default=5432, cast=int),
+    },
 }
 
 

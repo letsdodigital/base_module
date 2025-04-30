@@ -10,6 +10,7 @@ class PatientAdmin(admin.ModelAdmin):
         "last_name",
         "email",
         "date_of_birth",
+        "sex",
         "created_at",
     )
     search_fields = ("first_name", "last_name", "email")

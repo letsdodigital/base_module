@@ -4,19 +4,19 @@ import Link from "next/link";
 import { FC } from "react";
 import { Button, Dropdown, Grid, Input, Segment } from "semantic-ui-react";
 interface PatientBannerProps {
-  name: string;
-  dob: string;
-  age: number;
-  hospitalNumber: string;
-  sex: "Male" | "Female";
+  name?: string;
+  dob?: string;
+  age?: number | "";
+  hospitalNumber?: string;
+  sex?: "Male" | "Female";
 }
 
 const PatientBanner: FC<PatientBannerProps> = ({
-  name,
-  dob,
-  age,
-  hospitalNumber,
-  sex,
+  name = "",
+  dob = "",
+  age = "",
+  hospitalNumber = "",
+  sex = "",
 }) => {
   const { data: session } = useSession();
   return (
