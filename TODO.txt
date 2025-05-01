@@ -1,3 +1,4 @@
 TODO
 
 - Add CORS to django settings
+- make dates location aware

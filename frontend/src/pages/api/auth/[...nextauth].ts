@@ -16,7 +16,7 @@ export default NextAuth({
           ).toString('base64')}`;
 
           const response = await fetch(
-            'http://backend-database:8000/api/validate-credentials/',
+            'http://nginx/api/validate-credentials/',
             {
               method: 'POST',
               headers: {
@@ -29,6 +29,10 @@ export default NextAuth({
               })
             }
           );
+
+          // Log the response body for debugging
+          // const responseText = await response.text();
+          // console.log('Response Text:', responseText);
 
           const user = await response.json();
 

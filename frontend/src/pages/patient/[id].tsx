@@ -1,3 +1,4 @@
+import PatientBanner from "@/components/PatientBanner";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -24,24 +25,22 @@ const PatientPage: FC<PatientProps> = ({ patient }) => {
   }
 
   return (
-    <div style={{ margin: "20px" }}>
-      <h1>
-        {patient.first_name} {patient.last_name}
-      </h1>
-      <p>
-        <strong>Date of Birth:</strong> {patient.date_of_birth}
-      </p>
-      <p>
-        <strong>Sex:</strong> {patient.sex === "M" ? "Male" : "Female"}
-      </p>
-      <p>
-        <strong>Address:</strong> {patient.address}
-      </p>
-      <p>
-        <strong>Phone Number:</strong> {patient.phone_number}
-      </p>
-      <button onClick={() => router.push("/")}>Back to Patients List</button>
-    </div>
+    <>
+      <PatientBanner
+        name={`${patient.first_name} ${patient.last_name}`}
+        dob={new Date(patient.date_of_birth).toLocaleDateString("en-GB")}
+        sex={patient.sex === "M" ? "Male" : "Female"}
+      />
+      <div style={{ margin: "20px" }}>
+        <p>
+          <strong>Address:</strong> {patient.address}
+        </p>
+        <p>
+          <strong>Phone Number:</strong> {patient.phone_number}
+        </p>
+        <button onClick={() => router.push("/")}>Back to Patients List</button>
+      </div>
+    </>
   );
 };
 

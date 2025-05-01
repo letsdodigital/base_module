@@ -45,7 +45,11 @@ const Home: FC<HomeProps> = ({ patients }) => {
                     {patient.first_name} {patient.last_name}
                   </Link>
                 </Table.Cell>
-                <Table.Cell>{patient.date_of_birth || "N/A"}</Table.Cell>
+                <Table.Cell>
+                  {new Date(patient.date_of_birth).toLocaleDateString(
+                    "en-GB"
+                  ) || "N/A"}
+                </Table.Cell>
                 <Table.Cell>
                   {patient.sex === "M"
                     ? "Male"
