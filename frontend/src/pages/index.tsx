@@ -1,5 +1,5 @@
 import PatientBanner from "@/components/PatientBanner";
-import { useSession } from "next-auth/react";
+import UserStatus from "@/components/UserStatus";
 import Link from "next/link";
 import { FC } from "react";
 import { Table } from "semantic-ui-react";
@@ -17,8 +17,6 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({ patients }) => {
-  const { data: session } = useSession();
-
   return (
     <>
       <PatientBanner />
@@ -63,22 +61,7 @@ const Home: FC<HomeProps> = ({ patients }) => {
         </Table>
       </div>
 
-      {session && session.user && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "10px",
-            right: "10px",
-            backgroundColor: "#003366",
-            color: "#ffffff",
-            padding: "10px 15px",
-            borderRadius: "5px",
-            boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-          }}
-        >
-          Logged in as: {session.user.name}
-        </div>
-      )}
+      <UserStatus />
     </>
   );
 };
@@ -89,7 +72,7 @@ export const getServerSideProps = async () => {
       `${process.env.NEXT_USERNAME}:${process.env.NEXT_PASSWORD}`
     ).toString("base64")}`;
 
-    const response = await fetch("http://backend-database:8000/api/patients/", {
+    const response = await fetch("http://nginx/api/patients/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,10 +10,12 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Spinner state
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Show spinner immediately
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -22,6 +25,7 @@ const Login = () => {
 
     if (result?.error) {
       setError("Invalid username or password");
+      setLoading(false); // Hide spinner if login fails
     } else {
       router.push("/");
     }
@@ -32,6 +36,7 @@ const Login = () => {
       <Header as="h1" textAlign="center">
         Login
       </Header>
+      {loading && <Spinner message="Logging in..." />}
       <Form onSubmit={handleLogin} error={!!error}>
         <Form.Input
           label="Username"

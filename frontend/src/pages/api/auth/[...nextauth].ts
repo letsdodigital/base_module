@@ -30,10 +30,6 @@ export default NextAuth({
             }
           );
 
-          // Log the response body for debugging
-          // const responseText = await response.text();
-          // console.log('Response Text:', responseText);
-
           const user = await response.json();
 
           if (response.ok && user) {

@@ -1,4 +1,5 @@
 import PatientBanner from "@/components/PatientBanner";
+import UserStatus from "@/components/UserStatus";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -38,8 +39,8 @@ const PatientPage: FC<PatientProps> = ({ patient }) => {
         <p>
           <strong>Phone Number:</strong> {patient.phone_number}
         </p>
-        <button onClick={() => router.push("/")}>Back to Patients List</button>
       </div>
+      <UserStatus />
     </>
   );
 };
