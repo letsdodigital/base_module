@@ -17,15 +17,26 @@ backend-poetry:
     #!/usr/bin/env bash
     {{initialise}} "backend"
     just _start-container detached="true" build="false"
+    docker compose -f docker-compose-base-dev.yml -f docker-compose-module.yml exec -it backend-database bash -c "poetry shell && bash"
+
+
+alias bpb := backend-poetry-basic
+# Run the web app
+backend-poetry-basic:
+    #!/usr/bin/env bash
+    {{initialise}} "backend"
+    just _start-container detached="true" build="false"
     docker compose exec -it backend-database bash -c "poetry shell && bash"
+
 
 alias cfp := create-fake-patients
 # Create fake patients
 create-fake-patients:
     #!/usr/bin/env bash
     {{initialise}} "create-fake-patients"
-    just _start-container detached="true" build="false"
+    just _start-container-basic detached="true" build="false"
     docker compose exec backend-database /bin/sh -c "cd app && poetry run python manage.py create_fake_patients"
+
 
 _start-docker-daemon:
     #!/usr/bin/env bash
@@ -71,6 +82,31 @@ _start-container detached="true" build="true":
         echo "Container $container_name is already running."
     else
         echo "Container $container_name is not running. Starting it now..."
+        sh create-module-docker-compose.sh
+        docker compose -f docker-compose-base-dev.yml -f docker-compose-module.yml up $detached_flag $build_flag
+    fi
+
+# If needed, starts Docker daemon and also starts the container (detached: default: true, build: default: true)
+_start-container-basic detached="true" build="true":
+    #!/usr/bin/env bash
+    just _start-docker-daemon
+    container_name="backend-database"
+
+    # Determine flags based on arguments
+    detached_flag=""
+    if [ "$detached" = "true" ]; then
+        detached_flag="-d"
+    fi
+
+    build_flag=""
+    if [ "$build" = "true" ]; then
+        build_flag="--build"
+    fi
+
+    if [ "$(docker ps -q -f name=$container_name)" ]; then
+        echo "Container $container_name is already running."
+    else
+        echo "Container $container_name is not running. Starting it now..."
         docker compose up $detached_flag $build_flag
     fi
 
@@ -79,7 +115,7 @@ alias i := initialise-project
 initialise-project:
     #!/usr/bin/env bash
     {{initialise}} "initialise"
-    just _start-container
+    just _start-container-basic
     docker compose exec backend-database /bin/sh -c "poetry install && poetry run python app/create_next_user.py"
     just makemigrations-migrate
 
@@ -95,13 +131,19 @@ makemigrations-migrate:
     poetry run python manage.py migrate && \
     poetry run python manage.py migrate --database=patients"
 
-
 alias r := run
 # Run the whole service
 run:
     #!/usr/bin/env bash
     {{initialise}} "run"
     just _start-container detached="false" build="false"
+
+alias rb := run-basic
+# Run the whole service
+run-basic:
+    #!/usr/bin/env bash
+    {{initialise}} "run"
+    just _start-container-basic detached="false" build="false"
 
     
 find-subfolders:

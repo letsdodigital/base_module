@@ -1,5 +1,7 @@
 .DS_Store
 /modules/external
+/backend_database/modules
+/frontend/modules
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
