@@ -7,8 +7,6 @@ services:
     container_name: backend-database
     volumes:
       - ./backend_database:/app
-    # ports:
-    #   - "8000:8000"
     depends_on:
       - postgres-data
       - patients-postgres-data
@@ -39,8 +37,6 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/app
-    # ports:
-    #   - "3000:3000"
     depends_on:
       - backend-database
     env_file:

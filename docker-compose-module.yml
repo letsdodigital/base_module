@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend-database:
+    extends:
+      service: backend-database
+      file: docker-compose-base-dev.yml
+    volumes:
+      - ./modules/internal/clinical-notes-i1/backend:/app/modules/internal/clinical-notes-i1/backend
+      - ./modules/internal/observations-i1/backend:/app/modules/internal/observations-i1/backend
+      - ./modules/external/eproms-e1/backend:/app/modules/external/eproms-e1/backend
+      - ./modules/external/patient-portal-e1/backend:/app/modules/external/patient-portal-e1/backend
+
+  frontend:
+    extends:
+      service: frontend
+      file: docker-compose-base-dev.yml
+    volumes:
+      - ./modules/internal/clinical-notes-i1/frontend:/app/modules/internal/clinical-notes-i1/frontend
+      - ./modules/internal/observations-i1/frontend:/app/modules/internal/observations-i1/frontend
+      - ./modules/external/eproms-e1/frontend:/app/modules/external/eproms-e1/frontend
+      - ./modules/external/patient-portal-e1/frontend:/app/modules/external/patient-portal-e1/frontend

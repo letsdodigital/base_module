@@ -1,5 +1,0 @@
-TODO
-
-- Add CORS to django settings
-- make dates location aware
-- Remove thin white bar at the top fo the page whilst spinner is running
